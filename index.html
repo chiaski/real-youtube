@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+<link rel="shortcut icon" href="https://www.youtube.com/s/desktop/4ca12f19/img/favicon.ico" type="image/x-icon"><link rel="icon" href="https://www.youtube.com/s/desktop/4ca12f19/img/favicon_32.png" sizes="32x32">
+  <title>YouTube (REAL)</title>
+  <!-- Basal – adj. forming or belonging to a bottom layer or base. -->
+  <!-- 🚨 NOTE 🚨 -->
+  <!-- This is for instructional purposes. -->
+  <!-- While you can technically use this for an actual website, -->
+  <!-- it serves you best as inspiration. -->
+  
+  
+  <!--  This is for routing  -->
+  <script src="//unpkg.com/navigo"></script>
+
+  <!-- Feel free to delete this, just some sane style defaults -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css" />
+  <link rel="stylesheet" href="styling.css" />
+  
+  <!-- Styles for our different block types -->
+ 
+</head>
+
+<body>
+  
+  <section>
+  <div id="video">
+    
+    <div class="player" id="_video">
+        <div class="_player-cover">
+          <img src="https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2Fcover.png?v=1614109091237">
+        </div>
+          <!-- video image here -->
+    </div>
+    
+    
+    <div class="description">
+      <h1 id="_video-title">
+        RIP DAFT PUNK
+      </h1>
+
+      <button id="subscribe">
+        CHANGE
+      </button>
+      <div class="_description">
+        <span id="_view-count">4 views</span> · 
+        <span id="_view-count">February 23, 2021</span>
+      </div>
+      
+      <hr>
+      
+      <div class="_channel-description">
+        
+      
+      <img src="https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2Favatar.png?v=1614109088345" class="_avatar">
+      <div class="_channel-name">
+        Chia Amisola
+      </div>
+      <div class="_channel-subs">
+        2 Subscribers
+      </div>
+      
+      <div class="_description-text">
+        Hello this is a quick thing from the Are.na Workshop on February 23, 2021. I have an Are.na channel filled with strange comments from strangers that overshare on random YouTube music videos.  I'm so sorry.
+      </div>
+      
+      </div>
+    </div>
+    <hr><br>
+  </div>
+  
+  <div id="comments">
+    
+  </div>
+  </section>
+</body>
+
+<script type="module">  
+  
+  var videos = ["https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2F1.png?v=1614108555372", "https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2F2.png?v=1614108557228", "https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2F3.jpeg?v=1614113468841", "https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2F4.jpg?v=1614113471275", "https://cdn.glitch.com/a9fa6791-6a10-4157-9558-025e86b3d494%2F5.jpg?v=1614113473718"];
+  
+  
+  // https://stackoverflow.com/a/58363372
+function timeSince(date) {
+  
+  // let dateFormat = new Date(Date.parse(date));
+  let dateFormat = Date.parse(date) / 1000;
+  
+  var seconds = Math.floor(((new Date().getTime()/1000) - dateFormat)),
+  interval = Math.floor(seconds / 31536000);
+  
+  
+  if (interval > 1) return interval + " years ";
+  
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) return interval + " months ";
+  
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) return interval + " days ";
+  
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) return interval + " hours ";
+  
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) return interval + " minutes ";
+  
+  return Math.floor(seconds) + " seconds ";
+}
+  
+  function choose(arr){ console.log(arr[Math.floor(Math.random()*arr.length)]);
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+  
+  window.addEventListener("load", () => {
+    
+  function changeRawr(){
+    var newslug = window.prompt("Load a text channel...", "comments-left-on-music");
+    renderChannel(newslug);
+  }
+    document.getElementById("subscribe").addEventListener("click", changeRawr);
+    
+    document.getElementById("_video").innerHTML += "<img id='_video-image' src='" + choose(videos) + "'>";
+    
+    // Replace this with your channel slug 
+    // (i.e. in https://www.are.na/charles-broskoski/on-gathering-ftmpeeykqm0 ..the last part)
+    let channelSlug = 'comments-left-on-music';
+
+    function renderChannel(slug) {
+      // Add a loading message
+      let loading = `Loading...`;
+      document.getElementById("comments").innerHTML = loading;      
+
+      let contentsURL = `https://api.are.na/v2/channels/${slug}?sort=position&order=asc&per=100`;
+
+      // Fetch the channel data from the Are.na API
+      fetch(contentsURL)
+        // Grab the response in JSON
+        .then(response => response.json())
+
+        // Now we can turn channel data into content by mixing it with HTML
+        .then((channel) => {
+        
+          console.log(channel);
+          
+          // Set the title of the page      
+          document.title = channel.title;
+
+          // Replace the inner html of our document with our own mixture of HTML and channel data
+          document.getElementById("comments").innerHTML = `
+            <div class="ChannelContents">
+              ${channel.contents.reverse().map((block) => {
+                // Loop through the contents of the channel.
+                // Each block will be an object.
+
+                // An example block:
+                // 
+                // {
+                //   "id": 76969,
+                //   "title": "The Working Sheepdog ( Border Collies ) in training",
+                //   "updated_at": "2020-04-07T21:59:29.806Z",
+                //   "created_at": "2013-02-12T22:40:15.696Z",
+                //   "state": "available",
+                //   "comment_count": 0,
+                //   "generated_title": "The Working Sheepdog ( Border Collies ) in training",
+                //   "content_html": "",
+                //   "description_html": "<p>Border Collie Collies working sheepdog Sheep dogs in training Scotland</p>",
+                //   "visibility": "public",
+                //   "content": "",
+                //   "description": "Border Collie Collies working sheepdog Sheep dogs in training Scotland",
+                //   "source": {},
+                //   "image": {},
+                //   "embed": {},
+                //   "attachment": null,
+                //   "metadata": null,
+                //   "base_class": "Block",
+                //   "class": "Media",
+                //   "user": {},
+                //   "position": 1,
+                //   "selected": false,
+                //   "connection_id": 716562,
+                //   "connected_at": "2016-05-16T00:59:42.901Z",
+                //   "connected_by_user_id": 128,
+                //   "connected_by_username": "Chris Sherrón",
+                //   "connected_by_user_slug": "chris-sherron"
+                // },
+
+                // Return HTML for each block, mixed in with the data from the block.
+                return `
+                  <div class="Block-${block.class}">
+
+                    ${(() => {
+                      if (block.title && block.class !== 'Link' && block.class !== 'Channel') {
+                        let newtime = timeSince(block.updated_at);
+                        return `<div class="_circle-avatar"></div><div class="_comment-metadata"><strong class="_comment-title">${block.title}</strong> <span class="_time">${newtime} ago</span></div>`;
+                      }
+
+                      return ``;
+                    })()}
+
+
+                    ${(() => {
+                      // Handle each block depending on what type of block it is (i.e. Image, Text, etc)
+                      switch (block.class) {
+                        case "Url":
+                          return '';
+                        case "Image":
+                          return ``;
+                        case "Text":
+                          return `${block.content_html}`;
+                        case "Attachment":
+                          return '';
+                      }
+                    })()}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          `
+        })
+      }
+
+    // This will handle our routes
+    const router = new Navigo("/", { hash: true });
+    router
+      .on("/channel/:slug", (match) => { renderChannel(match.data.slug) })
+      .on(() => { renderChannel(channelSlug) })
+      .resolve();
+  });
+
+</script>
+</html>
